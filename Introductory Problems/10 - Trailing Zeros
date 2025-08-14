@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long int
+const int MOD = 1e9+7;
+
+int TrailingZeroes(int n){
+    int a=5;
+    int ans=0;
+    while(a<=n){
+        ans += floor(n/a);
+        a *= 5;
+    }
+    return ans;
+}
+
+void solve(){
+    int n;
+    cin>>n;
+
+    cout<<TrailingZeroes(n);    
+    return;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    
+    
+    solve();    
+    
+            
+}
