@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long int
+
+void solve(){
+    int n;
+    cin>>n;
+
+    int sum = (n*(n+1))/2;
+    if(sum%2){
+        cout<<"NO\n";
+    }else{
+        cout<<"YES\n";
+        vector<int> s1,s2;
+        int target = sum/2;
+
+        for(int i=n ; i>=1 ; i--){
+            if(i<=target){
+                s1.push_back(i);
+                target -= i;
+            }else{
+                s2.push_back(i);
+            }
+        }
+
+        int b = s1.size();
+        cout<<b<<'\n';
+        for(auto a:s1){
+            cout<<a<<' ';
+        }
+        cout<<'\n';
+        int c = s2.size();
+        cout<<c<<'\n';
+        for(auto a:s2){
+            cout<<a<<' ';
+        }
+        cout<<'\n';
+    }    
+    return;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    
+    solve();                
+}
