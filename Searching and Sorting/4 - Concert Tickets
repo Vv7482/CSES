@@ -1,0 +1,41 @@
+// Multiset and sorting with upper_bound
+#include <bits/stdc++.h>
+using namespace std;
+// #define int long long
+
+void solve() {
+    int n,m;
+    cin>>n>>m;
+    
+    multiset<int> h;
+    vector<int> t(m);
+    for(int i=0 ; i<n ; i++) {
+        int temp;
+        cin>>temp;
+        h.insert(temp);
+    }
+    for(int i=0 ; i<m ; i++) cin>>t[i];
+
+
+    int ans=0;
+    for(int i=0 ; i<m ; i++){
+        auto it = h.upper_bound(t[i]);
+        if(it == h.begin()){
+            cout<<"-1"<<'\n';
+        }else{
+            it--;
+            cout<<*it<<'\n';
+            h.erase(it);
+        }
+    }
+
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    solve();
+    
+}
