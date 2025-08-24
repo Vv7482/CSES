@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+define int long long
+
+void solve() {
+    int n;
+    cin>>n;
+
+    vector<pair<int,int>> events;
+    for(int i=0 ; i<n ; i++) {
+        int a,b;
+        cin>>a>>b;
+        events.push_back({a,+1});
+        events.push_back({b,-1});
+    }
+    sort(events.begin() , events.end());
+
+    int curr=0 , maxi = 0;
+    for(int i=0 ; i<2*n ; i++){
+        curr += events[i].second;
+        maxi = max(curr,maxi);
+    }
+    cout<<maxi<<'\n';
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    solve();
+    
+}
