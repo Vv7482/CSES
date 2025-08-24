@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+ 
+bool cmp(pair<int,int> &a , pair<int,int> &b){
+	return a.second<b.second;
+}
+ 
+void solve(){
+	int n;
+	cin>>n;
+	vector<pair<int,int>> movies(n);
+	for(int i=0 ; i<n ; i++){
+		int a,b;
+		cin>>a>>b;
+		movies[i].first = a;
+		movies[i].second = b;
+	}
+	
+	sort(movies.begin() , movies.end() , cmp);
+	
+	int prevend = 0;
+	int cnt=0;
+	for(int i=0 ; i<n ; i++){
+		if(prevend <= movies[i].first){
+			cnt++;
+			prevend = movies[i].second;
+		}
+	}
+	cout<<cnt<<'\n';	
+}
+ 
+signed main(){
+ 
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	
+	solve();
+}
