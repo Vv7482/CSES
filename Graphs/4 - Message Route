@@ -1,0 +1,67 @@
+//The question is same as building roads only thing is instead of vis[] array we use par[] array.
+
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+ 
+void BFS(int i , int n , vector<vector<int>> &adj , vector<int> &par){
+    queue<int> q;
+	q.push(i);
+	par[i] = 1;
+	while(!q.empty()){
+		int curr = q.front();
+		q.pop();
+		int len = adj[curr].size();
+		for(int j=0 ; j<len ; j++){
+			if(par[adj[curr][j]] == -1){
+				q.push(adj[curr][j]);
+				par[adj[curr][j]] = curr;
+				if(adj[curr][j] == n){
+					return;
+				}
+			}
+		}
+	}
+	return;
+}
+ 
+void solve() {
+	int n,m;
+	cin>>n>>m;
+	vector<vector<int>> adj(n+1);
+	for(int i=0 ; i<m ; i++){
+		int a,b;
+		cin>>a>>b;
+		adj[a].push_back(b);
+		adj[b].push_back(a);
+	} 
+	vector<int> par(n+1,-1);
+	vector<int> ans;
+	BFS(1,n,adj,par);
+	if(par[n] != -1){	
+		int parent = n;
+		ans.push_back(parent);
+		while(parent != 1){
+			ans.push_back(par[parent]);
+			parent = par[parent];
+		}
+		int len = ans.size();
+		cout<<len<<'\n';
+		reverse(ans.begin(),ans.end());
+		for(int i=0 ; i<len ; i++){
+			cout<<ans[i]<<' ';
+		}
+		cout<<'\n';
+	}else{
+		cout<<"IMPOSSIBLE"<<'\n';
+	}
+	return;
+}
+ 
+signed main() {
+    	ios_base::sync_with_stdio(0);
+    	cin.tie(0);
+    	cout.tie(0);
+ 
+    	solve();
+}
