@@ -3,7 +3,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
- 
+
 void BFS(int i , vector<vector<int>> &adj , vector<int> &vis){
     queue<int> q;
 	q.push(i);
@@ -11,7 +11,8 @@ void BFS(int i , vector<vector<int>> &adj , vector<int> &vis){
 	while(!q.empty()){
 		int curr = q.front();
 		q.pop();
-		for(int j=0 ; j<adj[curr].size() ; j++){
+		int len = adj[curr].size();
+		for(int j=0 ; j<len ; j++){
 			if(vis[adj[curr][j]] == -1){
 				q.push(adj[curr][j]);
 				vis[adj[curr][j]] = 1;
@@ -20,7 +21,7 @@ void BFS(int i , vector<vector<int>> &adj , vector<int> &vis){
 	}
 	return;
 }
- 
+
 void solve() {
 	int n,m;
 	cin>>n>>m;
@@ -39,7 +40,7 @@ void solve() {
 			BFS(i,adj,vis);
 		}
 	}
- 
+
 	int len = ans.size();
 	cout<<len-1<<'\n';
 	for(int i=1 ; i<len ; i++){
