@@ -1,0 +1,65 @@
+//Simple BFS approach problem
+
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+
+void BFS(int i , vector<vector<int>> &adj , vector<int> &teams , bool &check){
+    queue<int> q;
+	q.push(i);
+	teams[i] = 1;
+	while(!q.empty()){
+		int curr = q.front();
+		q.pop();
+		int team = teams[curr];
+		int len = adj[curr].size();
+		for(int j=0 ; j<len ; j++){
+			if(teams[adj[curr][j]] == -1){
+				q.push(adj[curr][j]);
+				teams[adj[curr][j]] = 1-team;
+			}else if(teams[adj[curr][j]] == team){
+					check = false;
+					return;
+			}
+		}
+	}
+	return;
+}
+
+void solve() {
+	int n,m;
+	cin>>n>>m;
+	vector<vector<int>> adj(n+1);
+	for(int i=0 ; i<m ; i++){
+		int a,b;
+		cin>>a>>b;
+		adj[a].push_back(b);
+		adj[b].push_back(a);
+	} 
+	vector<int> teams(n+1,-1);
+	bool check = true;
+	for(int i=1 ; i<=n ; i++){
+		if(teams[i] == -1){
+			BFS(i,adj,teams,check);
+			if(check == false){
+				cout<<"IMPOSSIBLE"<<'\n';
+				return;
+			}
+		}
+	}
+
+	for(int i=1 ; i<=n ; i++){
+		cout<<2-teams[i]<<' ';
+	}
+	cout<<'\n';
+	
+	return;
+}
+ 
+signed main() {
+    	ios_base::sync_with_stdio(0);
+    	cin.tie(0);
+    	cout.tie(0);
+ 
+    	solve();
+}
