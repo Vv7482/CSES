@@ -1,0 +1,48 @@
+// Dijkstra Algorithm
+
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+const int INF = 1e18;
+typedef pair<int,int> pii;
+
+void solve() {
+	int n,m;
+	cin>>n>>m;
+	vector<vector<pair<int,int>>> adj(n+1);
+	for(int i=0 ; i<m ; i++){
+		int a , b , c;
+		cin>>a>>b>>c;
+		adj[a].push_back({b,c});
+	}
+	priority_queue<pii,vector<pii>,greater<pii>> pq;
+	vector<int> dist(n+1,INF);
+	pq.push({0,1});
+	dist[1]=0;
+	while(!pq.empty()){
+		int curr = pq.top().second;
+		int curr_dist = pq.top().first;
+		pq.pop();
+		if(curr_dist > dist[curr]) continue;
+		for(auto it:adj[curr]){
+			if(dist[it.first] > curr_dist+it.second){
+				dist[it.first] = curr_dist+it.second;
+				pq.push({dist[it.first] , it.first});
+			}
+		}
+	}
+
+	for(int i=1 ; i<=n ; i++){
+		cout<<dist[i]<<' ';
+	}
+	
+	return;
+}
+ 
+signed main() {
+    	ios_base::sync_with_stdio(0);
+    	cin.tie(0);
+    	cout.tie(0);
+ 
+    	solve();
+}
