@@ -1,0 +1,117 @@
+//Think the approach correctly first, and then start writing code. Clarity is more important to write this code
+
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+const int INF = 1e9+7;
+
+void solve() {
+	int n,m;
+	cin>>n>>m;
+	vector<vector<int>> mat(n,vector<int>(m));
+	vector<pair<int,int>> monster;
+	int a=0 , b=0 ;
+	for(int i=0 ; i<n ; i++){
+		for(int j=0 ; j<m ; j++){
+			char c;
+			cin>>c;
+			if(c == '#') mat[i][j] = -1;
+			else if(c == 'M') {
+				mat[i][j] = 0;
+				monster.push_back({i,j});
+			}else if(c == 'A'){
+				mat[i][j] = INF;
+				a = i , b = j;
+			}
+			else mat[i][j] = INF;
+		}
+	} 
+
+	if(a==0 || a==n-1 || b==0 || b==m-1){
+		cout<<"YES\n"<<"0\n";
+		return;
+	}
+	int len = monster.size();
+	queue<pair<pair<int,int> , int>> q;
+	for(int i=0 ; i<len ; i++){
+		int x = monster[i].first;
+		int y = monster[i].second;
+		q.push({{x,y},0});
+	}
+		while(!q.empty()){
+			int x1 = q.front().first.first;
+			int y1 = q.front().first.second;
+			int curr = q.front().second;
+			q.pop();
+
+			int nr[] = {-1,0,1,0};
+			int nc[] = {0,1,0,-1};
+			for(int j=0 ; j<4 ; j++){
+				int nx1 = x1+nr[j];
+				int ny1 = y1+nc[j];
+				if(nx1>=0 && nx1<n && ny1>=0 && ny1<m && mat[nx1][ny1]!=-1 && mat[nx1][ny1]>curr+1){
+					mat[nx1][ny1] = curr+1;
+					q.push({{nx1,ny1},curr+1});
+				}
+			}
+		}
+
+	queue<pair<pair<int,int>,int>> q1;
+	vector<vector<char>> par(n,vector<char>(m));
+	vector<vector<int>> vis(n,vector<int>(m,0));
+	q1.push({{a,b},0});
+	vis[a][b] = 1;
+	while(!q1.empty()){
+		int x = q1.front().first.first;
+		int y = q1.front().first.second;
+		int curr = q1.front().second;
+		q1.pop();
+
+		int nr[] = {-1,0,1,0};
+		int nc[] = {0,1,0,-1};
+		for(int i=0 ; i<4 ; i++){
+			int nx = x+nr[i];
+			int ny = y+nc[i];
+
+			if(nx>=0 && nx<n && ny>=0 && ny<m && mat[nx][ny] != -1 && vis[nx][ny]==0 && mat[nx][ny] > curr+1){
+				if(i == 0) par[nx][ny] = 'U';
+				else if(i == 1) par[nx][ny] = 'R';
+				else if(i == 2) par[nx][ny] = 'D';
+				else if(i == 3) par[nx][ny] = 'L';
+				vis[nx][ny] = 1;
+
+				q1.push({{nx,ny},curr+1});
+
+				if(nx==0 || nx==n-1 || ny==0 || ny==m-1){
+					vector<char> ans;
+					while(!(nx == a && ny == b)){
+						ans.push_back(par[nx][ny]);
+						if(par[nx][ny] == 'U') nx+=1 ;
+						else if(par[nx][ny] == 'R') ny-=1;
+						else if(par[nx][ny] == 'D') nx-=1;
+						else if(par[nx][ny] == 'L') ny+=1;
+					}
+
+					int length = ans.size();
+					reverse(ans.begin() , ans.end());
+					cout<<"YES\n"<<length<<'\n';
+					for(int j=0 ; j<length ; j++){
+						cout<<ans[j];
+					}
+					cout<<'\n';
+					return;
+				}
+			}
+		}
+	}
+	cout<<"NO\n";
+	return;
+}
+ 
+signed main() {
+    	ios_base::sync_with_stdio(0);
+    	cin.tie(0);
+    	cout.tie(0);
+ 
+    	solve();
+}
