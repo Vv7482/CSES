@@ -1,0 +1,75 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+const int INF = 1e16;
+typedef pair<int,int> pii;
+
+struct edge{
+	int u,v,w;
+};
+
+void Dijkstra(vector<vector<pii>> &adj , int n , vector<int> &dist , int check){
+	priority_queue<pii , vector<pii> , greater<pii>> pq;
+	if(check){
+		pq.push({0,n});
+		dist[n] = 0;
+	}else{
+		pq.push({0,1});
+		dist[1] = 0;
+	}
+
+	while(!pq.empty()){
+		int curr_dist = pq.top().first;
+		int curr_node = pq.top().second;
+		pq.pop();
+		if(curr_dist > dist[curr_node]) continue;
+		for(auto e:adj[curr_node]){
+			if(dist[curr_node]+e.second < dist[e.first]){
+				dist[e.first] = dist[curr_node]+e.second;
+				pq.push({dist[e.first] , e.first});
+			}
+		}
+	}
+
+	return;
+}
+
+void solve() {
+	int n,m;
+	cin>>n>>m;
+	vector<vector<pii>> adj(n+1);
+	vector<vector<pii>> radj(n+1);
+	vector<edge> edges;
+
+	for(int i=0 ; i<m ; i++){
+		int a,b,c;
+		cin>>a>>b>>c;
+		adj[a].push_back({b,c});
+		radj[b].push_back({a,c});
+		edges.push_back({a,b,c});
+	}
+
+	vector<int> dist_1(n+1 , INF);
+	vector<int> dist_2(n+1 , INF);
+
+	Dijkstra(adj , n , dist_1 , 0);
+	Dijkstra(radj , n , dist_2 , 1);
+
+	int ans = INF;
+	for(auto e:edges){
+		if(dist_1[e.u] == INF || dist_2[e.v] == INF) continue;
+		int temp = dist_1[e.u] + e.w/2 + dist_2[e.v];
+		ans = min(ans,temp);
+	}
+
+	cout<< ans << '\n';
+	return;
+}
+ 
+signed main() {
+    	ios_base::sync_with_stdio(0);
+    	cin.tie(0);
+    	cout.tie(0);
+ 
+    	solve();
+}
