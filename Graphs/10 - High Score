@@ -1,0 +1,56 @@
+//A little tricky question , can be done with Bellman ford algorithm.
+
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+const int INF = 1e16;
+typedef pair<int,int> pii;
+
+struct edge{
+	int u,v,w;
+};
+
+void solve() {
+	int n,m;
+	cin>>n>>m;
+	vector<edge> edges(m);
+	int a,b,c;
+	for(int i=0 ; i<m ; i++){
+		cin>>a>>b>>c;
+		edges[i] = {a,b,c};
+	} 
+
+	vector<int> dist(n+1 , INF);
+	dist[1] = 0;
+	for(int i=1 ; i<n ; i++){
+		for(auto &e:edges){
+			if(dist[e.u]<INF && dist[e.u]+e.w<dist[e.v]){
+				dist[e.v] = dist[e.u]+e.w;
+			}
+		}
+	}
+
+	vector<int> affected(n+1,0);
+	//checking whether negative cycle affects the route from 1 --> N;
+	for(int i=1 ; i<=n ; i++){
+		for(auto &e:edges){
+			if(dist[e.u]<INF && dist[e.u]+e.w<dist[e.v]){
+				affected[e.v] = 1;
+				dist[e.v] = -INF;
+			}
+			if(affected[e.u]) affected[e.v] = 1;
+		}
+	}
+
+	if(affected[n]) cout<<"-1\n";
+	else cout<<-dist[n]<<'\n';
+	return;
+}
+ 
+signed main() {
+    	ios_base::sync_with_stdio(0);
+    	cin.tie(0);
+    	cout.tie(0);
+ 
+    	solve();
+}
