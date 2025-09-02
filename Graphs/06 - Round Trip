@@ -1,0 +1,66 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+
+bool DFS(int i , int parent , vector<vector<int>> &adj , vector<int> &vis , vector<int> &par , int &start , int &end){
+	vis[i] = 1;
+
+	for(auto it:adj[i]){
+		if(!vis[it]){
+			par[it] = i;
+			if(DFS(it , i , adj , vis , par , start , end)) return true;
+		}else if(it != parent){
+			start = i;
+			end = it;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void solve() {
+	int n,m;
+	cin>>n>>m;
+	vector<vector<int>> adj(n+1);
+	for(int i=0 ; i<m ; i++){
+		int a,b;
+		cin>>a>>b;
+		adj[a].push_back(b);
+		adj[b].push_back(a);
+	}
+
+	vector<int> vis(n+1 , 0);
+	vector<int> par(n+1 , -1);
+
+	for(int i=1 ; i<=n ; i++){
+		int start = 0 , end = 0;
+		if(!vis[i]){
+			if(DFS(i,-1,adj,vis,par,start,end)){
+				vector<int> ans;
+				ans.push_back(end);
+                for(int v=start; v!=end; v=par[v]){
+                    ans.push_back(v);
+                }
+                ans.push_back(end);
+				int len = ans.size();
+				cout<<len<<'\n';
+				for(int i=0 ; i<len ; i++){
+					cout<<ans[i]<<' ';
+				}
+				return;
+			}
+		}
+	}
+
+	cout<< "IMPOSSIBLE" << '\n';
+	return;
+}
+ 
+signed main() {
+    	ios_base::sync_with_stdio(0);
+    	cin.tie(0);
+    	cout.tie(0);
+ 
+    	solve();
+}
