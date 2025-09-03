@@ -16,7 +16,7 @@ void solve() {
 		cin>>a>>b>>c;
 		adj[a].push_back({b,c});
 		dist[a][b] = min(dist[a][b], c); 
-    dist[b][a] = min(dist[b][a], c);
+    	dist[b][a] = min(dist[b][a], c);
 	}
 	for(int i=1 ; i<=n ; i++) dist[i][i]=0;
 	for(int k=1 ; k<=n ; k++){
