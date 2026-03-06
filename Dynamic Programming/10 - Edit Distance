@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+string s,t;
+int dp[5010][5010];
+
+int rec(int i , int j){
+    // Pruning
+    // Base Case
+    if(i==0 && j==0) return 0;
+    if(i==0) return j;
+    if(j==0) return i;
+    // Case check
+    if(dp[i][j] != -1) return dp[i][j];
+    // Transition Step
+    int ans = 0;
+    if(s[i-1] == t[j-1]) ans = rec(i-1 , j-1);
+    else{
+        ans = 1 + min({rec(i-1,j-1) , rec(i-1,j) , rec(i,j-1)});
+    } 
+    // Save & Return
+    return dp[i][j] = ans;
+}
+
+void solve() {
+    cin>>s>>t;
+
+    memset(dp,-1,sizeof(dp));
+    int m = s.size() , n = t.size();
+
+    cout<<rec(m,n)<<'\n';
+	
+    return;
+}
+                                          
+signed main() {
+    	ios_base::sync_with_stdio(0);
+    	cin.tie(0);
+    	cout.tie(0);
+    	
+		solve();
+		return 0;
+}
