@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long 
+
+vector<int> dist;
+vector<vector<int>> edges;
+
+void dfs(int node , int par , int depth){
+    dist[node] = depth;
+    for(auto v:edges[node]){
+        if(v != par){
+            dfs(v,node,depth+1);
+        }
+    }
+    return;
+}
+
+void solve(){
+    
+    int n;
+    cin>>n;
+
+    int a,b;
+    edges.resize(n+1);
+    dist.resize(n+1);
+    for(int i=0 ; i<n-1 ; i++){
+        cin>>a>>b;
+        edges[a].push_back(b);
+        edges[b].push_back(a);
+    }
+
+    int x=1;
+    dfs(1,0,0);
+    for(int i=1 ; i<=n ; i++){
+        if(dist[i] > dist[x]){
+            x=i;
+        }
+    }
+
+    int y=1;
+    dfs(x,0,0);
+    for(int i=1 ; i<=n ; i++){
+        if(dist[i] > dist[y]){
+            y=i;
+        }
+    }
+
+    cout<<dist[y]<<'\n';    
+    return ;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    solve();
+
+    return 0;
+}
