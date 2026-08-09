@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+const int MOD = 1e9 + 7;
+ 
+int n;
+vector<int> dis;
+vector<vector<int>> adj;
+ 
+void dfs(int u , int p){
+    if(p==0) dis[u] = 0;
+    else dis[u] = dis[p]+1;
+    
+    for(auto v:adj[u]){
+        if(v != p) dfs(v,u);
+    }
+    
+    return;
+}
+ 
+void solve(){
+    cin>>n;
+    adj.clear();
+    adj.resize(n+1);
+    dis.clear();
+    dis.resize(n+1,0);
+    
+    int a,b;
+    for(int i=0 ; i<n-1 ; i++){
+        cin>>a>>b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+    
+    dfs(1,0);
+    a=0,b=0;
+    
+    int maxi = INT_MIN;
+    for(int i=1 ; i<=n ; i++){
+        if(dis[i] >= maxi){
+            maxi = dis[i];
+            a = i;
+        }
+    }
+    
+    dfs(a,0);
+    vector<int> A = dis;
+    maxi = INT_MIN;
+    for(int i=1 ; i<=n ; i++){
+        if(dis[i] >= maxi){
+            maxi = dis[i];
+            b = i;
+        }
+    }
+    
+    dfs(b,0);
+    vector<int> B = dis;
+    
+    for(int i=1 ; i<=n ; i++) cout<<max(A[i],B[i])<<" ";
+    cout<<'\n';
+    
+    return;
+}
+ 
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+ 
+    solve();
+ 
+    return 0;
+}
