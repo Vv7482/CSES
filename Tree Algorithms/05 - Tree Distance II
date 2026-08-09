@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+const int MOD = 1e9 + 7;
+ 
+int n , total = 0;
+vector<int> dis , sub_sz , ans;
+vector<vector<int>> adj;
+ 
+void dfs(int u , int p){
+    if(p==0) dis[u] = 0;
+    else dis[u] = dis[p]+1;
+    
+    sub_sz[u] = 1;
+    
+    for(auto v:adj[u]){
+        if(v != p){
+            dfs(v,u);
+            sub_sz[u] += sub_sz[v];
+        }
+    }
+    
+    return;
+}
+ 
+void rec(int u , int p){
+    ans[u] = total;
+    
+    for(auto v:adj[u]){
+        if(v != p){
+            total += (n-2*sub_sz[v]);
+            rec(v,u);
+            total -= (n-2*sub_sz[v]);
+        }
+    }
+    
+    return;
+}
+ 
+void solve(){
+    cin>>n;
+    adj.clear();
+    adj.resize(n+1);
+    dis.clear();
+    dis.resize(n+1,0);
+    sub_sz.clear();
+    sub_sz.resize(n+1,0);
+    ans.clear();
+    ans.resize(n+1,0);
+    
+    int a,b;
+    for(int i=0 ; i<n-1 ; i++){
+        cin>>a>>b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+    
+    dfs(1,0);
+    
+    for(auto it:dis) total += it;
+    
+    rec(1,0);
+    
+    for(int i=1 ; i<=n ; i++) cout<<ans[i]<<'\n';
+    cout<<'\n';
+    
+    return;
+}
+ 
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+ 
+    solve();
+ 
+    return 0;
+}
