@@ -1,0 +1,92 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+const int MOD = 1e9+7;
+
+int n,q;
+vector<int> dep;
+vector<vector<int>> adj , par;
+
+void dfs(int u , int p){
+    if(p != -1){
+        par[u][0] = p;
+        dep[u] = dep[p]+1;
+    }
+    
+    for(int i=1 ; i<=19 ; i++){
+        if(par[u][i-1] != -1) par[u][i] = par[par[u][i-1]][i-1];
+        else break;
+    }
+    
+    for(auto v:adj[u]){
+        if(v != p){
+            dfs(v,u);
+        }
+    }
+    
+    return;
+}
+
+int Kthancestor(int x , int k){
+    
+    for(int i=19 ; i>=0 ; i--){
+        if(k & (1<<i)){
+            x = par[x][i];
+            if(x == -1) return -1;
+        }
+    }
+    
+    return x;
+}
+
+int LCA(int u , int v){
+    
+    if(dep[u] < dep[v]) swap(u,v);
+    
+    int diff = dep[u]-dep[v];
+    u = Kthancestor(u,diff);
+    
+    if(u == v) return u;
+    
+    for(int i=19 ; i>=0 ; i--){
+        if(par[u][i] != par[v][i]){
+            u = par[u][i];
+            v = par[v][i];
+        }
+    }
+    
+    return par[u][0];
+}
+
+void solve(){
+    cin>>n>>q;
+    
+    adj.resize(n+1);
+    dep.resize(n+1,0);
+    par.resize(n+1 , vector<int>(20,-1));
+    int a , b;
+    for(int i=0 ; i<n-1 ; i++){
+        cin>>a>>b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+    
+    dfs(1,-1);
+    
+    while(q--){
+        cin>>a>>b;
+        cout<<dep[a]+dep[b]-2*dep[LCA(a,b)]<<'\n';
+    }
+    
+    return;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    
+    solve();
+    
+    return 0;
+}
