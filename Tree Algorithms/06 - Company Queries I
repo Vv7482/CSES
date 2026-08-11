@@ -1,0 +1,68 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+const int MOD = 1e9+7;
+ 
+int n,q;
+vector<vector<int>> adj , par;
+ 
+void dfs(int u , int p){
+    if(p != -1) par[u][0] = p;
+    
+    for(int i=1 ; i<=19 ; i++){
+        if(par[u][i-1] != -1) par[u][i] = par[par[u][i-1]][i-1];
+        else break;
+    }
+    
+    for(auto v:adj[u]){
+        if(v != p){
+            dfs(v,u);
+        }
+    }
+    
+    return;
+}
+ 
+int Kthancestor(int x , int k){
+    
+    for(int i=19 ; i>=0 ; i--){
+        if(k & (1<<i)){
+            x = par[x][i];
+            if(x == -1) return -1;
+        }
+    }
+    
+    return x;
+}
+ 
+void solve(){
+    cin>>n>>q;
+    
+    adj.resize(n+1);
+    par.resize(n+1 , vector<int>(20,-1));
+    int a , b;
+    for(a=2 ; a<=n ; a++){
+        cin>>b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+    
+    dfs(1,-1);
+    
+    while(q--){
+        cin>>a>>b;
+        cout<<Kthancestor(a,b)<<'\n';
+    }
+    
+    return;
+}
+ 
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    
+    solve();
+    
+    return 0;
+}
